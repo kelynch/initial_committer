@@ -42,7 +42,7 @@ readme.write(File.read('templates/readme_content').gsub('{{project_name}}', proj
 
 `git commit "Modified gitignore"`
 
-`git checkout -b #{branch_name}`
+`git checkout #{branch_name}`
 
 `git add .`
 
