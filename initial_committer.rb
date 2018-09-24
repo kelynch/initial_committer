@@ -50,4 +50,4 @@ FileUtils.chdir(project_path)
 
 `git merge #{branch_name}`
 
-puts 'Done'
+puts 'Project created'
