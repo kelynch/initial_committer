@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'git'
 require 'zaru'
 
 require 'pry'
@@ -21,28 +20,27 @@ branch_name = "features/#{project.upcase}-0-Initial_commit"
 
 FileUtils.mkdir_p(project_path)
 
-Git.init(project_path)
-
-git = Git.clone(project_path, "clones/#{project}")
-
-git.config('user.name', 'Kate Lynch')
-git.config('user.email', 'katherly@upenn.edu')
-
-gitignore = File.new("clones/#{project}/.gitignore", 'w+')
-readme = File.new("clones/#{project}/README.md", 'w+')
-license = File.new("clones/#{project}/LICENSE", 'w+')
-code_file = File.new("clones/#{project}/#{project}.rb", 'w+')
+gitignore = File.new("#{project_path}/.gitignore", 'w+')
+readme = File.new("#{project_path}/README.md", 'w+')
+license = File.new("#{project_path}/LICENSE", 'w+')
+code_file = File.new("#{project_path}/#{project}.rb", 'w+')
 
 gitignore.write(File.read('templates/gitignore_content'))
 code_file.write(File.read('templates/code_template_ruby'))
 license.write(File.read('templates/license_content'))
 readme.write(File.read('templates/readme_content').gsub('{{project_name}}', project).gsub('{{namespace}}',project_namespace))
 
+gitignore.close && code_file.close && license.close && readme.close
+
+FileUtils.chdir(project_path)
+
+`git init`
+
 `git add .gitignore`
 
-`git commit "Modified gitignore"`
+`git commit -m "Modified gitignore"`
 
-`git checkout #{branch_name}`
+`git checkout -b #{branch_name}`
 
 `git add .`
 
@@ -51,7 +49,5 @@ readme.write(File.read('templates/readme_content').gsub('{{project_name}}', proj
 `git checkout master`
 
 `git merge #{branch_name}`
-
-FileUtils.rm_r("clones/#{project}")
 
 puts 'Done'
